@@ -14,6 +14,7 @@ export const findImages = async (query, page) => {
     per_page: 40,
     page: page,
   });
+
   const response = await axios.get(`/?${params.toString()}`);
   return response.data;
 };
