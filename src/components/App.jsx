@@ -23,31 +23,21 @@ class App extends Component {
 
     if (prevState.query !== query || prevState.page !== page) {
       try {
-        if (prevState.query !== this.state.query) {
-          this.setState(() => ({
-            images: [],
-            page: 1,
-          }));
-        }
-
         this.setState(() => ({
           loader: true,
           error: false,
-          hasMore: false,
         }));
 
         let images = await findImages(query, page);
 
-        if (images.hits.length !== 0) {
-          this.setState(() => ({
-            images: [...this.state.images, ...images.hits],
-            hasMore: true,
-          }));
-        } else {
-          this.setState(() => ({
-            hasMore: false,
-          }));
+        if (images.hits.length === 0) {
+          return alert('Not found');
         }
+
+        this.setState(() => ({
+          images: [...this.state.images, ...images.hits],
+          hasMore: page < Math.ceil(images.totalHits / 12),
+        }));
       } catch (error) {
         this.setState(() => ({
           error: true,
@@ -60,12 +50,11 @@ class App extends Component {
     }
   }
 
-  handleSubmit = evt => {
-    evt.preventDefault();
-    const form = evt.target;
-    const search = form.elements.search.value;
+  handleSubmit = query => {
     this.setState(() => ({
-      query: search,
+      query: query,
+      images: [],
+      page: 1,
     }));
   };
 
