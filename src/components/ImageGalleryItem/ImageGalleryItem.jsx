@@ -22,14 +22,16 @@ export class ImageGalleryItem extends Component {
     const { item } = this.props;
 
     return (
-      <Item onClick={this.openModal}>
-        <Img src={item.webformatURL} alt={item.tags} />
+      <>
+        <Item onClick={this.openModal}>
+          <Img src={item.webformatURL} alt={item.tags} />
+        </Item>
         <ModalComponent
           isOpen={isModalOpen}
           onRequestClose={this.closeModal}
           item={item}
         />
-      </Item>
+      </>
     );
   }
 }
